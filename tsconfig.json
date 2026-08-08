@@ -8,7 +8,8 @@
     "allowJs": true,
     "strict": true,
     "allowSyntheticDefaultImports": true,
-    "noUncheckedSideEffectImports": true
+    "noUncheckedSideEffectImports": true,
+    "types": ["@types/node"]
   },
   "include": [
     "eslint.config.mts",
