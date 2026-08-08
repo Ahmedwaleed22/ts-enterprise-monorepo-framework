@@ -1,0 +1,32 @@
+{
+  "name": "@monorepo-framework/encryption",
+  "version": "0.0.1",
+  "description": "Application-key encryption and signing",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "private": true,
+  "scripts": {
+    "build": "tsc -p tsconfig.build.json",
+    "test": "vitest run",
+    "lint": "eslint .",
+    "api:extract": "api-extractor run --local",
+    "api:check": "api-extractor run"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    }
+  },
+  "devDependencies": {
+    "@types/node": "^26.1.2",
+    "vitest": "^4.1.10"
+  },
+  "dependencies": {
+    "@monorepo-framework/support": "workspace:*"
+  }
+}

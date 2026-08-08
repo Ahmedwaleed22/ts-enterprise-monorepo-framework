@@ -1,0 +1,13 @@
+{
+  // Build config: emits `src` to `dist`. Tests are deliberately excluded so they
+  // stay out of the published output and don't fight `rootDir`.
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "rootDir": "src",
+    "outDir": "dist",
+    "composite": true,
+    "noEmit": false,
+    "declaration": true
+  },
+  "include": ["src/**/*.ts"]
+}
