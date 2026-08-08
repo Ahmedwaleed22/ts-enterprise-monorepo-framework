@@ -10,8 +10,8 @@ allowBuilds:
   esbuild: true
   less: true
   nx: true
-  sharp: set this to true or false
-  unrs-resolver: set this to true or false
+  sharp: true
+  unrs-resolver: true
 minimumReleaseAgeExclude:
   - tsx@4.23.11
 onlyBuiltDependencies:

@@ -3,10 +3,12 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
+    "build": "NODE_OPTIONS='--max-old-space-size=512' next build",
     "dev": "next dev",
-    "build": "nx next:build",
-    "start": "nx next:start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "start": "next start",
+    "test": "vitest --run",
+    "check": "pnpm lint && pnpm test"
   },
   "dependencies": {
     "next": "16.2.12",
@@ -21,7 +23,6 @@
     "eslint": "^9",
     "eslint-config-next": "16.2.12",
     "tailwindcss": "^4",
-    "typescript": "^5",
-    "vitest": "^4.1.10"
+    "typescript": "^5"
   }
 }

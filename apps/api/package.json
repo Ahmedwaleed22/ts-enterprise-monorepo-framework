@@ -9,7 +9,7 @@
     "build": "tsc",
     "start": "node dist/main.js",
     "test": "vitest run",
-    "lint": "nx eslint:lint",
+    "lint": "eslint .",
     "db": "pnpm --filter @monorepo-framework/database run build && tsx src/database/console.ts",
     "migrate": "pnpm run db migrate",
     "db:seed": "pnpm run db db:seed"

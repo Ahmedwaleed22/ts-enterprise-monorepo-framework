@@ -8,7 +8,7 @@
   "scripts": {
     "build": "tsc",
     "test": "vitest run",
-    "lint": "nx eslint:lint"
+    "lint": "eslint ."
   },
   "keywords": [],
   "author": "",
