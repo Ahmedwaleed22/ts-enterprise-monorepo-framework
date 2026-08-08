@@ -1,5 +1,5 @@
 import express, { type Express } from "express";
-import apiRouter from "./routes/api";
+import apiRouter from "./routes/api.js";
 
 export const app: Express = express();
 

@@ -5,7 +5,6 @@
   "main": "dist/index.js",
   "private": true,
   "scripts": {
-    "dev": "pnpm dlx tsx --watch --watch-preserve-output src/index.ts",
     "build": "tsc",
     "test": "vitest run",
     "lint": "nx eslint:lint"

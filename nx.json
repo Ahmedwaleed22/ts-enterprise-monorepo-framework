@@ -2,13 +2,15 @@
 	"$schema": "./node_modules/nx/schemas/nx-schema.json",
 	"targetDefaults": {
 		"dev": {
-			"dependsOn": ["^dev"]
+			"dependsOn": ["^dev"],
+			"continuous": true
 		},
 		"build": {
 			"dependsOn": ["^build"]
 		},
 		"start": {
-			"dependsOn": ["^start"]
+			"dependsOn": ["^start"],
+			"continuous": true
 		},
 		"lint": {
 			"dependsOn": ["^lint"]

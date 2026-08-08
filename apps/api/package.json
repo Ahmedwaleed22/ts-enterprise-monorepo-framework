@@ -5,20 +5,25 @@
   "main": "dist/index.js",
   "private": true,
   "scripts": {
-    "dev": "pnpm dlx tsx --watch --watch-preserve-output src/index.ts",
+    "dev": "tsx --watch --watch-preserve-output src/index.ts",
     "build": "tsc",
     "start": "node dist/main.js",
     "test": "vitest run",
-    "lint": "nx eslint:lint"
+    "lint": "nx eslint:lint",
+    "db": "pnpm --filter @monorepo-framework/database run build && tsx src/database/console.ts",
+    "migrate": "pnpm run db migrate",
+    "db:seed": "pnpm run db db:seed"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "type": "module",
   "dependencies": {
+    "@monorepo-framework/database": "workspace:*",
     "express": "^5.2.1"
   },
   "devDependencies": {
-    "@types/express": "^5.0.6"
+    "@types/express": "^5.0.6",
+    "tsx": "^4.23.11"
   }
 }

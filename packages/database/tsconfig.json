@@ -4,9 +4,9 @@
     "rootDir": "src",
     "outDir": "dist",
     "composite": true,
+    "noEmit": false,
+    "declaration": true
   },
-  // Without this the workspace-wide `include` from the root config is
-  // inherited, pulling every package's sources outside this app's rootDir.
   "include": ["src/**/*.ts"],
   "exclude": ["node_modules", "dist"]
 }

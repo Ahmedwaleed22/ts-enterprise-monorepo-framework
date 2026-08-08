@@ -37,3 +37,7 @@ out
 .nx/polygraph
 .claude/worktrees
 .claude/settings.local.json
+# Local sqlite databases
+*.sqlite
+*.sqlite3
+.env
