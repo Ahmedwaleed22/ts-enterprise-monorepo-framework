@@ -49,7 +49,7 @@ export type { ConsoleOptions } from './console.js'
 
 export { Migration } from './migrations/migration.js'
 export { Migrator } from './migrations/migrator.js'
-export type { MigrationStatus, MigratorOptions } from './migrations/migrator.js'
+export type { MigrationSource, MigrationStatus, MigratorOptions } from './migrations/migrator.js'
 export { MigrationRepository } from './migrations/repository.js'
 export type { MigrationRecord } from './migrations/repository.js'
 

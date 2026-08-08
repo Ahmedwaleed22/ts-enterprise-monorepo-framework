@@ -4,6 +4,10 @@
     "rootDir": "src",
     "outDir": "dist",
     "composite": true,
+    // drizzle-orm ships declarations for dialects it does not depend on (`gel`),
+    // and its MySQL builders do not typecheck under this workspace's `strict`
+    // settings. Neither affects the code here, but both are fatal without this.
+    "skipLibCheck": true,
   },
   // Without this the workspace-wide `include` from the root config is
   // inherited, pulling every package's sources outside this app's rootDir.

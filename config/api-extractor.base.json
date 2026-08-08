@@ -24,6 +24,12 @@
 	},
 
 	/**
+	 * The default is CRLF, which makes every committed report churn against a
+	 * repository that stores LF.
+	 */
+	"newlineKind": "lf",
+
+	/**
 	 * The API report is a human-readable snapshot of the public surface, checked
 	 * into `etc/`. A diff there is the review signal for an intentional (or
 	 * accidental) API change.

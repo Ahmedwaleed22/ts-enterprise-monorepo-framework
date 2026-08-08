@@ -1,9 +1,13 @@
-import express, { type Request, type Response, type Router } from "express";
+import express, { type Router } from "express";
+
+import { destroy, index, show, store, update } from "../controllers/UserController.js";
 
 const router: Router = express.Router();
 
-router.get("/", (req: Request, res: Response) => {
-  return res.status(200).json({ message: "Users route" });
-});
+router.get("/", index);
+router.post("/", store);
+router.get("/:id", show);
+router.patch("/:id", update);
+router.delete("/:id", destroy);
 
 export default router;

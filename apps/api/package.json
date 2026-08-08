@@ -10,9 +10,10 @@
     "start": "node dist/main.js",
     "test": "vitest run --passWithNoTests",
     "lint": "eslint .",
-    "db": "pnpm --filter @monorepo-framework/database run build && tsx src/database/console.ts",
+    "db": "pnpm --filter \"@monorepo-framework/api^...\" run build && tsx src/database/console.ts",
     "migrate": "pnpm run db migrate",
-    "db:seed": "pnpm run db db:seed"
+    "db:seed": "pnpm run db db:seed",
+    "key:generate": "pnpm --filter \"@monorepo-framework/api^...\" run build && tsx src/console/key.ts key:generate"
   },
   "keywords": [],
   "author": "",
@@ -20,10 +21,15 @@
   "type": "module",
   "dependencies": {
     "@monorepo-framework/database": "workspace:*",
+    "@monorepo-framework/encryption": "workspace:*",
+    "better-sqlite3": "^13.0.3",
+    "drizzle-orm": "^0.45.2",
     "express": "^5.2.1",
+    "mysql2": "^3.23.2",
     "pg": "^8.22.0"
   },
   "devDependencies": {
+    "@types/better-sqlite3": "^9.6.0",
     "@types/express": "^5.0.6",
     "@types/pg": "^8.20.4",
     "tsx": "^4.23.11"

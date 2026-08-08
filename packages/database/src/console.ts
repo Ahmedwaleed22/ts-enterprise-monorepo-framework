@@ -1,6 +1,7 @@
 import { createConnection } from './connections/index.js'
 import { Migrator } from './migrations/migrator.js'
 import { SeederRunner } from './seeders/runner.js'
+import type { MigrationSource } from './migrations/migrator.js'
 import type { ConnectionConfig } from './types.js'
 
 /**
@@ -17,6 +18,25 @@ export interface ConsoleOptions {
 	 * path derived from `import.meta.url`.
 	 */
 	migrations: string
+
+	/**
+	 * Migrations owned by packages rather than by the application.
+	 *
+	 * @remarks
+	 * Packages that need their own tables — a cache store, a session store, a job
+	 * queue — expose a `migrationSource()`, so an application opts in by listing
+	 * it here instead of copying files it would then have to maintain. Each
+	 * source carries a prefix, so a shipped migration can never collide with one
+	 * of the application's.
+	 *
+	 * @example
+	 * ```ts
+	 * packageMigrations: [cacheMigrations(), sessionMigrations()]
+	 * ```
+	 *
+	 * @defaultValue none, running only the application's own migrations
+	 */
+	packageMigrations?: readonly MigrationSource[]
 
 	/** Directory holding seeder files. Resolved like {@link ConsoleOptions.migrations}. */
 	seeders: string
@@ -104,7 +124,10 @@ export async function run(argv: string[], options: ConsoleOptions): Promise<numb
 
 	const connection = await createConnection(options.connection)
 	const migrator = new Migrator(connection, {
-		path: options.migrations,
+		// The application's own migrations come first so they keep the unprefixed
+		// names already recorded in the tracking table; ordering within the run is
+		// by filename regardless.
+		path: [{ path: options.migrations }, ...(options.packageMigrations ?? [])],
 		table: options.migrationsTable,
 	})
 	const seeders = new SeederRunner(connection, { path: options.seeders })

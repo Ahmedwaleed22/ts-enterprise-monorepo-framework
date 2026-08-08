@@ -4,8 +4,10 @@ packages:
 allowBuilds:
   '@parcel/watcher': true
   '@tailwindcss/oxide': true
-  # Left unbuilt: the sqlite driver falls back to Node's built-in `node:sqlite`.
-  # Set to true to compile the native module and use better-sqlite3 instead.
+  # Left uncompiled: `packages/database` falls back to Node's built-in
+  # `node:sqlite`, and Drizzle — which has no `node:sqlite` driver — loads
+  # better-sqlite3 through the prebuilt binaries it ships. Set to true only if a
+  # platform without a prebuild ever needs to compile from source.
   better-sqlite3: false
   esbuild: true
   less: true
