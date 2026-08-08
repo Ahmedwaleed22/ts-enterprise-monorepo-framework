@@ -8,6 +8,6 @@ router.get("/", (req: express.Request, res: express.Response) => {
 });
 
 // Module routes
-router.use("/test", userRouter);
+router.use("/user", userRouter);
 
 export default router;
