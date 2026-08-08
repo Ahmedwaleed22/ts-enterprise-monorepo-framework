@@ -1,0 +1,9 @@
+/**
+ * Teaches TSDoc-aware tooling (editors, `eslint-plugin-tsdoc`, API Extractor)
+ * which tags this package uses. The base file defines the standard set,
+ * including the `@public` / `@beta` / `@alpha` / `@internal` release tags.
+ */
+{
+	"$schema": "https://developer.microsoft.com/json-schemas/tsdoc/v0/tsdoc.schema.json",
+	"extends": ["@microsoft/api-extractor/extends/tsdoc-base.json"]
+}

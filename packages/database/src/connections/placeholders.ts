@@ -1,8 +1,15 @@
 /**
  * Rewrite portable `?` placeholders to Postgres' positional `$1`, `$2` form.
  *
- * Question marks inside string literals are left alone, so seed data
- * containing prose (`'Is it working?'`) survives the rewrite intact.
+ * @remarks
+ * Question marks inside single- or double-quoted literals are left alone, so
+ * seed data containing prose (`'Is it working?'`) survives the rewrite intact.
+ * Doubled quotes are understood as escapes rather than as the end of a literal.
+ *
+ * @param query - SQL using `?` placeholders.
+ * @returns The same SQL with each placeholder numbered from `$1`.
+ *
+ * @internal
  */
 export function toPositionalPlaceholders(query: string): string {
 	let result = ''

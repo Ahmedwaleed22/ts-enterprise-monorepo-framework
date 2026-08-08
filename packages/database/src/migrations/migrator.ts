@@ -10,30 +10,77 @@ import type { Connection } from '../types.js'
 
 const SOURCE_EXTENSIONS = new Set(['.ts', '.mts', '.js', '.mjs'])
 
+/**
+ * Construction options for {@link Migrator}.
+ *
+ * @public
+ */
 export interface MigratorOptions {
-	/** Directory holding the migration files. */
+	/** Directory holding the migration files, resolved against the working directory. */
 	path: string
-	/** Name of the table tracking applied migrations. */
+
+	/**
+	 * Name of the table tracking applied migrations.
+	 *
+	 * @defaultValue `"migrations"`
+	 */
 	table?: string
-	/** Where progress is reported. Pass a noop logger to silence output. */
+
+	/**
+	 * Where progress is reported. Pass a noop logger to silence output.
+	 *
+	 * @defaultValue `console.log`
+	 */
 	logger?: (message: string) => void
 }
 
+/**
+ * One row of {@link Migrator.status}: a migration on disk, and whether it ran.
+ *
+ * @public
+ */
 export interface MigrationStatus {
+	/** Migration name, i.e. its filename without extension. */
 	migration: string
+	/** Batch it was applied in, or `undefined` while still pending. */
 	batch: number | undefined
+	/** Whether the migration has been applied. */
 	ran: boolean
 }
 
 /**
  * Discovers migration files, applies the pending ones and rolls them back in
  * reverse order, recording each step so runs are resumable and idempotent.
+ *
+ * @remarks
+ * Each step is applied inside a transaction on Postgres and sqlite, so a
+ * failure leaves nothing behind. MySQL commits implicitly on DDL, so the step
+ * is deliberately *not* wrapped there — a transaction would only give a false
+ * sense of atomicity.
+ *
+ * Migrations are imported dynamically at the moment they run, so a `.ts` file
+ * needs a loader such as `tsx` in the running process.
+ *
+ * A migrator holds no state between calls; every method re-reads the directory
+ * and the tracking table.
+ *
+ * @example
+ * ```ts
+ * const migrator = new Migrator(connection, { path: './src/database/migrations' })
+ * await migrator.run()
+ * ```
+ *
+ * @public
  */
 export class Migrator {
 	private readonly repository: MigrationRepository
 	private readonly directory: string
 	private readonly log: (message: string) => void
 
+	/**
+	 * @param connection - Database to migrate.
+	 * @param options - Where the migrations live, and how to report progress.
+	 */
 	constructor(
 		private readonly connection: Connection,
 		options: MigratorOptions,
@@ -43,7 +90,17 @@ export class Migrator {
 		this.log = options.logger ?? ((message) => { console.log(message) })
 	}
 
-	/** Migration names on disk, in the order they should be applied. */
+	/**
+	 * Migration names on disk, in the order they should be applied.
+	 *
+	 * @remarks
+	 * Reads `.ts`, `.mts`, `.js` and `.mjs` files, ignoring declaration files.
+	 * A missing directory yields an empty list rather than an error, so a
+	 * project without migrations yet still runs.
+	 *
+	 * @returns Filenames without extension, sorted lexically — which is
+	 * chronological, given the timestamp prefix convention.
+	 */
 	async available(): Promise<string[]> {
 		let entries: string[]
 		try {
@@ -60,7 +117,18 @@ export class Migrator {
 			.sort((a, b) => a.localeCompare(b))
 	}
 
-	/** Apply every migration that has not run yet. */
+	/**
+	 * Apply every migration that has not run yet.
+	 *
+	 * @remarks
+	 * All of them share one batch number, so a later `migrate:rollback` reverses
+	 * exactly this run. Creates the tracking table on first use.
+	 *
+	 * @returns Names of the migrations applied, empty if nothing was pending.
+	 * @throws Error if a migration file has no default export, is missing, or
+	 * its `up` throws. Migrations applied before the failure stay applied and
+	 * recorded.
+	 */
 	async run(): Promise<string[]> {
 		await this.repository.ensureExists()
 
@@ -84,7 +152,18 @@ export class Migrator {
 		return pending
 	}
 
-	/** Reverse the most recent `steps` batches. */
+	/**
+	 * Reverse the most recent `steps` batches.
+	 *
+	 * @remarks
+	 * Within a batch, migrations are reversed newest first. Stops early once
+	 * there is nothing left to roll back.
+	 *
+	 * @param steps - How many batches to reverse.
+	 * @returns Names of the migrations reversed, in the order they were
+	 * reversed.
+	 * @throws Error if a migration's file is gone or its `down` throws.
+	 */
 	async rollback(steps = 1): Promise<string[]> {
 		await this.repository.ensureExists()
 
@@ -107,20 +186,45 @@ export class Migrator {
 		return rolledBack
 	}
 
-	/** Roll back every batch. */
+	/**
+	 * Roll back every batch.
+	 *
+	 * @remarks
+	 * Runs each migration's `down`, so it depends on those being correct. When
+	 * they are not, {@link Migrator.fresh} is the blunter alternative.
+	 *
+	 * @returns Names of the migrations reversed.
+	 */
 	async reset(): Promise<string[]> {
 		await this.repository.ensureExists()
 		const batches = await this.repository.lastBatch()
 		return this.rollback(batches)
 	}
 
-	/** Drop every table and migrate from scratch. */
+	/**
+	 * Drop every table and migrate from scratch.
+	 *
+	 * @remarks
+	 * Destroys all data in the database, including the tracking table, and never
+	 * calls a migration's `down`. Intended for development and test databases.
+	 *
+	 * @returns Names of the migrations applied afterwards.
+	 */
 	async fresh(): Promise<string[]> {
 		this.log('Dropping all tables...')
 		await new Schema(this.connection).dropAllTables()
 		return this.run()
 	}
 
+	/**
+	 * Which migrations exist, and which have run.
+	 *
+	 * @remarks
+	 * Driven by the files on disk, so a migration recorded in the table but no
+	 * longer present is not reported.
+	 *
+	 * @returns One entry per migration file, in application order.
+	 */
 	async status(): Promise<MigrationStatus[]> {
 		await this.repository.ensureExists()
 		const batches = new Map(

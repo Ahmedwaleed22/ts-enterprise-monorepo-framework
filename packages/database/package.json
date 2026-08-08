@@ -8,7 +8,9 @@
   "scripts": {
     "build": "tsc -p tsconfig.build.json",
     "test": "vitest run",
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "api:extract": "api-extractor run --local",
+    "api:check": "api-extractor run"
   },
   "keywords": [],
   "author": "",

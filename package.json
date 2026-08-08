@@ -8,7 +8,11 @@
     "test": "pnpm --color run -r test",
     "dev": "scripts/dev.sh",
     "format": "prettier --write packages/*/{src,tests}/**/*.ts packages/*/{tailwind.config.js,postcss.config.cjs,vite.config.ts,svelte.config.js}",
-    "check": "pnpm --color run -r check"
+    "check": "pnpm --color run -r check",
+    "api:extract": "pnpm --color run -r api:extract",
+    "api:check": "pnpm --color run -r api:check",
+    "api:document": "api-documenter markdown --input-folder common/temp/api --output-folder docs/api",
+    "docs": "pnpm run build && pnpm run api:extract && pnpm run api:document"
   },
   "volta": {
     "node": "24.19.0"
@@ -16,6 +20,8 @@
   "devDependencies": {
     "@eslint/js": "^9.28.0",
     "@manypkg/cli": "^0.25.1",
+    "@microsoft/api-documenter": "^7.30.10",
+    "@microsoft/api-extractor": "^7.58.12",
     "@types/node": "^24.0.0",
     "concurrently": "^9.1.2",
     "eslint": "^9.28.0",

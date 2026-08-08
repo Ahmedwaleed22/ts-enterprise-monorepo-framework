@@ -44,6 +44,23 @@ function clientConnection(client: PgClient, parent: Connection): Connection {
 	}
 }
 
+/**
+ * Open a Postgres connection backed by a `pg` pool.
+ *
+ * @remarks
+ * Requires the optional `pg` peer dependency. Portable `?` placeholders are
+ * rewritten to `$1`, `$2` before every query. Statements inside a transaction
+ * run on a single checked-out client rather than being handed back to the pool
+ * between calls.
+ *
+ * Reached through {@link createConnection} in application code.
+ *
+ * @param config - Either `url`, or the discrete host/port/database fields.
+ * @returns An open connection; {@link Connection.close} drains the pool.
+ * @throws Error naming `pg` if the driver is not installed.
+ *
+ * @internal
+ */
 export async function createPostgresConnection(
 	config: ConnectionConfig,
 ): Promise<Connection> {

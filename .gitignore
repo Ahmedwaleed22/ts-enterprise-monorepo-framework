@@ -15,6 +15,7 @@ dist-ssr
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
+!.vscode/settings.json
 .idea
 .DS_Store
 *.suo
@@ -41,3 +42,8 @@ out
 *.sqlite
 *.sqlite3
 .env
+
+# API Extractor intermediates. `etc/*.api.md` is the reviewed API report and is
+# deliberately tracked; these two are regenerated on every run.
+common/temp
+packages/*/temp

@@ -51,6 +51,26 @@ async function resolveDriver(): Promise<SqliteConstructor> {
 	}
 }
 
+/**
+ * Open a sqlite connection.
+ *
+ * @remarks
+ * Prefers `better-sqlite3` when installed and falls back to Node's built-in
+ * `node:sqlite`, so sqlite needs no dependency at all. Both drivers are
+ * synchronous; the connection methods stay `async` so a driver error surfaces
+ * as a rejected promise like the other dialects.
+ *
+ * The database file's containing directory is created if needed, foreign key
+ * enforcement is switched on (sqlite leaves it off), and nested transactions
+ * use savepoints.
+ *
+ * Reached through {@link createConnection} in application code.
+ *
+ * @param config - Only `url` is read: the file path, or `:memory:`.
+ * @returns An open connection.
+ *
+ * @internal
+ */
 export async function createSqliteConnection(config: ConnectionConfig): Promise<Connection> {
 	const filename = config.url ?? 'database/database.sqlite'
 	if (filename !== ':memory:') {

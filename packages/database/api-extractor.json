@@ -1,0 +1,8 @@
+/**
+ * Everything meaningful lives in the shared base config; a package only opts in.
+ * See `config/api-extractor.base.json` at the workspace root.
+ */
+{
+	"$schema": "https://developer.microsoft.com/json-schemas/api-extractor/v7/api-extractor.schema.json",
+	"extends": "../../config/api-extractor.base.json"
+}

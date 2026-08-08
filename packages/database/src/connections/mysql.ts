@@ -43,6 +43,22 @@ function pooledConnection(client: MysqlConnection, parent: Connection): Connecti
 	}
 }
 
+/**
+ * Open a MySQL connection backed by a `mysql2` pool.
+ *
+ * @remarks
+ * Requires the optional `mysql2` peer dependency. MySQL speaks `?` placeholders
+ * natively, so no rewriting is needed. Note that MySQL commits implicitly on
+ * DDL — a transaction here protects data changes, not schema changes.
+ *
+ * Reached through {@link createConnection} in application code.
+ *
+ * @param config - Either `url`, or the discrete host/port/database fields.
+ * @returns An open connection; {@link Connection.close} drains the pool.
+ * @throws Error naming `mysql2` if the driver is not installed.
+ *
+ * @internal
+ */
 export async function createMysqlConnection(config: ConnectionConfig): Promise<Connection> {
 	const module = await loadDriver<MysqlModule>('mysql2/promise', 'mysql2')
 	const pool = module.default.createPool(

@@ -3,14 +3,36 @@ import { Migrator } from './migrations/migrator.js'
 import { SeederRunner } from './seeders/runner.js'
 import type { ConnectionConfig } from './types.js'
 
+/**
+ * Wiring an application supplies to {@link runConsole}.
+ *
+ * @public
+ */
 export interface ConsoleOptions {
-	/** Directory holding migration files. */
+	/**
+	 * Directory holding migration files.
+	 *
+	 * @remarks
+	 * Resolved relative to the process working directory, so prefer an absolute
+	 * path derived from `import.meta.url`.
+	 */
 	migrations: string
-	/** Directory holding seeder files. */
+
+	/** Directory holding seeder files. Resolved like {@link ConsoleOptions.migrations}. */
 	seeders: string
-	/** Defaults to the environment-derived configuration. */
+
+	/**
+	 * Database to run against.
+	 *
+	 * @defaultValue the environment-derived configuration from {@link configFromEnv}
+	 */
 	connection?: ConnectionConfig
-	/** Name of the table tracking applied migrations. */
+
+	/**
+	 * Name of the table tracking applied migrations.
+	 *
+	 * @defaultValue `"migrations"`
+	 */
 	migrationsTable?: string
 }
 
@@ -30,11 +52,13 @@ Options:
   --class=<Seeder>        Seeder class to run (default: DatabaseSeeder)
 `
 
+/** @internal */
 function flag(argv: string[], name: string): string | undefined {
 	const match = argv.find((argument) => argument.startsWith(`--${name}=`))
 	return match?.slice(name.length + 3)
 }
 
+/** @internal */
 function hasFlag(argv: string[], name: string): boolean {
 	return argv.includes(`--${name}`)
 }
@@ -42,8 +66,33 @@ function hasFlag(argv: string[], name: string): boolean {
 /**
  * Entry point for an application's database CLI.
  *
+ * @remarks
  * Applications wire this up with their own migration and seeder directories,
  * keeping the commands identical across every project in the monorepo.
+ *
+ * Recognised commands: `migrate`, `migrate:rollback` (`--step=<n>`),
+ * `migrate:reset`, `migrate:fresh` (`--seed`), `migrate:status` and `db:seed`
+ * (`--class=<Seeder>`). Passing nothing, `--help` or `-h` prints usage.
+ *
+ * The connection is always closed before returning, including on failure.
+ * Errors are reported to stderr rather than thrown, so a caller only has to
+ * forward the exit code.
+ *
+ * @param argv - Command and flags, i.e. `process.argv.slice(2)`.
+ * @param options - Where migrations and seeders live, and what to connect to.
+ * @returns A process exit code: `0` on success, `1` on a usage error or a
+ * failed command.
+ *
+ * @example
+ * ```ts
+ * // apps/api/src/database/console.ts
+ * process.exitCode = await runConsole(process.argv.slice(2), {
+ *   migrations: new URL('./migrations', import.meta.url).pathname,
+ *   seeders: new URL('./seeders', import.meta.url).pathname,
+ * })
+ * ```
+ *
+ * @public
  */
 export async function run(argv: string[], options: ConsoleOptions): Promise<number> {
 	const [command] = argv

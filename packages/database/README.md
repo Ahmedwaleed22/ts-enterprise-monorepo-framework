@@ -6,6 +6,30 @@ Migrations describe tables in dialect-neutral terms; a grammar compiles them to 
 for whichever database is configured. Switching database means changing one env
 var, not rewriting migrations.
 
+The full API reference is generated from the source comments — see
+[`docs/api`](../../docs/api/database.md), or [`docs/README.md`](../../docs/README.md)
+for how the pipeline works.
+
+## API stability
+
+Every export carries a TSDoc release tag, enforced by API Extractor:
+
+- **`@public`** — migrations, seeders, the schema builder, connections and
+  configuration. The surface an application uses.
+- **`@beta`** — the grammar extension point (`Grammar` and its subclasses,
+  `grammarFor`, `ColumnAttributes`, `IndexDefinition`, `ForeignKeyDefinition`),
+  whose protected surface grows as the builder learns more column modifiers; and
+  the `ALTER TABLE` path (`Blueprint.dropColumn`, `Blueprint.dropIndex`,
+  `Schema.rename`), which is thin and the least exercised across the three
+  dialects.
+- **`@internal`** — everything not re-exported from `src/index.ts`: the driver
+  loader, the placeholder rewriter, the per-dialect connection factories. Use
+  `createConnection` instead of reaching for those.
+
+`etc/database.api.md` is the reviewed snapshot of that surface; a diff there
+means the API changed. `etc/database.public.api.md` is the same with `@beta`
+trimmed.
+
 ## Commands
 
 Run from an app that wires up the console (see `apps/api/src/database/console.ts`):

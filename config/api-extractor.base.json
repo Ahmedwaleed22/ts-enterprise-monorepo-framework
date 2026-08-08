@@ -1,0 +1,130 @@
+/**
+ * Shared API Extractor settings for every package in the workspace.
+ *
+ * Each package keeps a three-line `api-extractor.json` that extends this file,
+ * so the report layout, doc-model location and lint policy stay identical
+ * across packages and the doc models can be merged into one site.
+ *
+ * Path tokens are resolved per package: `<projectFolder>` is the folder of the
+ * nearest package.json above the *extending* config, and
+ * `<unscopedPackageName>` is that package's name without its npm scope.
+ * https://api-extractor.com/pages/configs/api-extractor_json/
+ */
+{
+	"$schema": "https://developer.microsoft.com/json-schemas/api-extractor/v7/api-extractor.schema.json",
+
+	/**
+	 * Analysis starts from the built type declarations, so what is documented is
+	 * exactly what consumers can import — not what happens to live in `src`.
+	 */
+	"mainEntryPointFilePath": "<projectFolder>/dist/index.d.ts",
+
+	"compiler": {
+		"tsconfigFilePath": "<projectFolder>/tsconfig.build.json"
+	},
+
+	/**
+	 * The API report is a human-readable snapshot of the public surface, checked
+	 * into `etc/`. A diff there is the review signal for an intentional (or
+	 * accidental) API change.
+	 *
+	 * `reportVariants` also emits a `@public`-only file, which is the surface a
+	 * consumer sees when `@beta`/`@alpha` items are trimmed from a release.
+	 */
+	"apiReport": {
+		"enabled": true,
+		"reportFileName": "<unscopedPackageName>",
+		"reportVariants": ["complete", "public"],
+		"reportFolder": "<projectFolder>/etc/",
+		"reportTempFolder": "<projectFolder>/temp/"
+	},
+
+	/**
+	 * Every package writes its doc model into one shared folder, which is what
+	 * lets API Documenter render a single site covering the whole workspace.
+	 */
+	"docModel": {
+		"enabled": true,
+		"apiJsonFilePath": "<projectFolder>/../../common/temp/api/<unscopedPackageName>.api.json",
+		"includeForgottenExports": false,
+
+		/**
+		 * Only `@internal` is trimmed, so `@beta` items are documented alongside
+		 * `@public` ones and readers can see what is still settling.
+		 *
+		 * Note that `@alpha` is not a usable middle ground here: API Extractor
+		 * unconditionally drops `@alpha` *class methods* from the doc model
+		 * (`ApiModelGenerator._processApiMethod`), whatever this setting says, so
+		 * an `@alpha` method silently disappears from the docs and any
+		 * `{@link}` to it breaks. Prefer `@beta` for anything that should still
+		 * be documented.
+		 */
+		"releaseTagsToTrim": ["@internal"],
+		"projectFolderUrl": "https://github.com/monorepo-framework/seeds/tree/main/packages/<unscopedPackageName>"
+	},
+
+	/** Packages ship the `tsc` output directly, so no rollup is needed. */
+	"dtsRollup": {
+		"enabled": false
+	},
+
+	"tsdocMetadata": {
+		"enabled": false
+	},
+
+	"messages": {
+		/** TSDoc syntax problems in the source comments. */
+		"tsdocMessageReporting": {
+			"default": {
+				"logLevel": "warning"
+			}
+		},
+
+		"extractorMessageReporting": {
+			"default": {
+				"logLevel": "warning"
+			},
+
+			/**
+			 * The three rules that keep the release tags trustworthy, so they are
+			 * errors rather than warnings:
+			 *
+			 * - every export carries an explicit `@public`/`@beta`/`@alpha`/`@internal`
+			 * - no export leaks a type that was never exported
+			 * - no stable API references a less-stable one
+			 */
+			"ae-missing-release-tag": {
+				"logLevel": "error",
+				"addToApiReportFile": false
+			},
+			"ae-forgotten-export": {
+				"logLevel": "error",
+				"addToApiReportFile": false
+			},
+			"ae-incompatible-release-tags": {
+				"logLevel": "error",
+				"addToApiReportFile": false
+			},
+
+			/**
+			 * Undocumented items are flagged in the report file rather than the
+			 * console, so `etc/*.api.md` shows exactly what still needs prose.
+			 */
+			"ae-undocumented": {
+				"logLevel": "warning",
+				"addToApiReportFile": true
+			},
+
+			/**
+			 * Rushstack's `_underscore` naming convention for `@internal` items is
+			 * not used here. The only `@internal` items reaching an entry point are
+			 * brand symbols that a public type declaration happens to reference, and
+			 * renaming those would be noise.
+			 */
+			"ae-internal-missing-underscore": {
+				"logLevel": "none",
+				"addToApiReportFile": false
+			}
+		}
+	}
+}
