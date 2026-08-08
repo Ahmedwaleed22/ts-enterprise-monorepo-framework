@@ -1,12 +1,8 @@
 {
+  // Tooling config (editor, eslint's projectService, vitest). Covers tests too,
+  // so type-aware lint rules can resolve them. Emitting is tsconfig.build.json's
+  // job — this one inherits `noEmit` from the root config.
   "extends": "../../tsconfig.json",
-  "compilerOptions": {
-    "rootDir": "src",
-    "outDir": "dist",
-    "composite": true,
-    "noEmit": false,
-    "declaration": true
-  },
-  "include": ["src/**/*.ts"],
+  "include": ["src/**/*.ts", "tests/**/*.ts"],
   "exclude": ["node_modules", "dist"]
 }

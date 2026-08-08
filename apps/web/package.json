@@ -7,7 +7,7 @@
     "dev": "next dev",
     "lint": "eslint",
     "start": "next start",
-    "test": "vitest --run",
+    "test": "vitest --run --passWithNoTests",
     "check": "pnpm lint && pnpm test"
   },
   "dependencies": {

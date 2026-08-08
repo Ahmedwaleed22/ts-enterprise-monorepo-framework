@@ -1,3 +1,5 @@
+import "./env.js";
+
 import express, { type Express } from "express";
 import apiRouter from "./routes/api.js";
 
@@ -18,7 +20,7 @@ app.get("/", (req: express.Request, res: express.Response) => {
 // Routes
 app.use("/api", apiRouter);
 
-const PORT = process.env.PORT || 8000;
+const PORT = Number(process.env.PORT) || 8000;
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });

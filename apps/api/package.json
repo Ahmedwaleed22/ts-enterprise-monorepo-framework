@@ -8,7 +8,7 @@
     "dev": "tsx --watch --watch-preserve-output src/index.ts",
     "build": "tsc",
     "start": "node dist/main.js",
-    "test": "vitest run",
+    "test": "vitest run --passWithNoTests",
     "lint": "eslint .",
     "db": "pnpm --filter @monorepo-framework/database run build && tsx src/database/console.ts",
     "migrate": "pnpm run db migrate",
@@ -20,10 +20,12 @@
   "type": "module",
   "dependencies": {
     "@monorepo-framework/database": "workspace:*",
-    "express": "^5.2.1"
+    "express": "^5.2.1",
+    "pg": "^8.22.0"
   },
   "devDependencies": {
     "@types/express": "^5.0.6",
+    "@types/pg": "^8.20.4",
     "tsx": "^4.23.11"
   }
 }

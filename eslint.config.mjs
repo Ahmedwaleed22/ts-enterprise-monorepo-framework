@@ -11,7 +11,7 @@ export default tseslint.config(eslint.configs.recommended, tseslint.configs.stri
 }, {
     ignores: ['**/dist/**', '**/coverage/**', 'svelte.config.js'],
 }, {
-    files: ['packages/**/src/**/*.ts', 'packages/**/tests/**/*.ts'],
+    files: ['**/src/**/*.ts', '**/src/**/*.tsx', '**/tests/**/*.ts'],
     rules: {
         '@typescript-eslint/no-unused-vars': ['error', { argsIgnorePattern: '^_' }],
         '@typescript-eslint/restrict-template-expressions': [

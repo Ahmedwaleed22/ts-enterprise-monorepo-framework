@@ -1,6 +1,16 @@
 {
   "extends": "../../tsconfig.json",
   "compilerOptions": {
+    // The root config targets Node libraries (`NodeNext`). Next.js is
+    // bundler-resolved and needs DOM libs, so override those here — under
+    // `NodeNext` the type imports Next ships (e.g. @vercel/og) fail to resolve.
+    "lib": ["ES2020", "DOM", "DOM.Iterable"],
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "esModuleInterop": true,
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "skipLibCheck": true,
     "jsx": "react-jsx",
     "incremental": true,
     "plugins": [
