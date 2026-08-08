@@ -22,7 +22,6 @@
     "concurrently": "^9.1.2",
     "eslint": "^9.28.0",
     "knip": "^6.29.0",
-    "nx": "23.1.1",
     "prettier": "^3.5.3",
     "prettier-plugin-svelte": "^3.4.0",
     "syncpack": "^15.3.2",
