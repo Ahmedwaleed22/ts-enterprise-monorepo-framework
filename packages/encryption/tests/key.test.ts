@@ -40,9 +40,7 @@ describe('parseKey', () => {
 	test('rejects a key of the wrong length', () => {
 		// A short key would still "work" — it would just be weaker — so the
 		// length is checked rather than padded.
-		expect(() => parseKey('base64:c2hvcnQ=')).toThrow(
-			/must decode to 32 bytes, got 5/,
-		)
+		expect(() => parseKey('base64:c2hvcnQ=')).toThrow(/must decode to 32 bytes, got 5/)
 	})
 })
 

@@ -109,7 +109,9 @@ describe('indexes', () => {
 		const statements = grammarFor(dialect).compileCreate(usersBlueprint())
 
 		expect(statements).toHaveLength(2)
-		expect(statements[1]).toMatch(/create unique index .users_email_unique. on .users. \(.email.\)/)
+		expect(statements[1]).toMatch(
+			/create unique index .users_email_unique. on .users. \(.email.\)/,
+		)
 	})
 
 	test.each(DIALECTS)('%s names composite indexes after their columns', (dialect) => {

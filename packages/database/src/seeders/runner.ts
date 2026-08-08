@@ -67,7 +67,11 @@ export class SeederRunner {
 	) {
 		this.directory = resolve(options.path)
 		this.defaultSeeder = options.defaultSeeder ?? 'DatabaseSeeder'
-		this.log = options.logger ?? ((message) => { console.log(message) })
+		this.log =
+			options.logger ??
+			((message) => {
+				console.log(message)
+			})
 	}
 
 	/**
@@ -105,13 +109,16 @@ export class SeederRunner {
 			entries = await readdir(this.directory)
 		} catch (error) {
 			if ((error as NodeJS.ErrnoException).code === 'ENOENT') {
-				throw new Error(`Seeder directory ${this.directory} does not exist.`, { cause: error })
+				throw new Error(`Seeder directory ${this.directory} does not exist.`, {
+					cause: error,
+				})
 			}
 			throw error
 		}
 
 		const match = entries.find(
-			(entry) => basename(entry, extname(entry)) === name && SOURCE_EXTENSIONS.has(extname(entry)),
+			(entry) =>
+				basename(entry, extname(entry)) === name && SOURCE_EXTENSIONS.has(extname(entry)),
 		)
 
 		if (!match) {

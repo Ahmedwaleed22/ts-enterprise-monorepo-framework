@@ -7,7 +7,7 @@
     "lint": "pnpm --color run -r lint",
     "test": "pnpm --color run -r test",
     "dev": "scripts/dev.sh",
-    "format": "prettier --write packages/*/{src,tests}/**/*.ts packages/*/{tailwind.config.js,postcss.config.cjs,vite.config.ts,svelte.config.js}",
+    "format": "prettier --write packages/*/{src,tests}/**/*.ts",
     "check": "pnpm --color run -r check",
     "api:extract": "pnpm --color run -r api:extract",
     "api:check": "pnpm --color run -r api:check",

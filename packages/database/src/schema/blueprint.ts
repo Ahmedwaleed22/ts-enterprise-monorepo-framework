@@ -337,7 +337,13 @@ export class Blueprint {
 	private addColumn(
 		name: string,
 		type: ColumnType,
-		options: { length?: number; precision?: number; scale?: number; primary?: boolean; unsigned?: boolean } = {},
+		options: {
+			length?: number
+			precision?: number
+			scale?: number
+			primary?: boolean
+			unsigned?: boolean
+		} = {},
 	): ColumnDefinition {
 		const column = new ColumnDefinition(name, type, options)
 		this.columns.push(column)

@@ -132,7 +132,9 @@ describe('extending', () => {
 		const manager = new Widgets()
 		manager.extend('custom', () => widget('custom'))
 
-		await expect(manager.driver('gamma')).rejects.toThrow('Supported: alpha, beta, custom.')
+		await expect(manager.driver('gamma')).rejects.toThrow(
+			'Supported: alpha, beta, custom.',
+		)
 	})
 })
 

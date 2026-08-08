@@ -74,21 +74,21 @@ describe('envNumber', () => {
 
 describe('envChoice', () => {
 	test('resolves a canonical name', () => {
-		expect(envChoice({ CACHE_STORE: 'redis' }, 'CACHE_STORE', STORE_ALIASES, 'memory')).toBe(
-			'redis',
-		)
+		expect(
+			envChoice({ CACHE_STORE: 'redis' }, 'CACHE_STORE', STORE_ALIASES, 'memory'),
+		).toBe('redis')
 	})
 
 	test('resolves an alias to its canonical name', () => {
-		expect(envChoice({ CACHE_STORE: 'array' }, 'CACHE_STORE', STORE_ALIASES, 'memory')).toBe(
-			'memory',
-		)
+		expect(
+			envChoice({ CACHE_STORE: 'array' }, 'CACHE_STORE', STORE_ALIASES, 'memory'),
+		).toBe('memory')
 	})
 
 	test('is case-insensitive', () => {
-		expect(envChoice({ CACHE_STORE: 'REDIS' }, 'CACHE_STORE', STORE_ALIASES, 'memory')).toBe(
-			'redis',
-		)
+		expect(
+			envChoice({ CACHE_STORE: 'REDIS' }, 'CACHE_STORE', STORE_ALIASES, 'memory'),
+		).toBe('redis')
 	})
 
 	test('falls back when unset', () => {
@@ -98,6 +98,8 @@ describe('envChoice', () => {
 	test('rejects an unknown choice and lists what is accepted', () => {
 		expect(() =>
 			envChoice({ CACHE_STORE: 'memcached' }, 'CACHE_STORE', STORE_ALIASES, 'memory'),
-		).toThrow('Unsupported value "memcached" for CACHE_STORE. Supported: memory, array, redis.')
+		).toThrow(
+			'Unsupported value "memcached" for CACHE_STORE. Supported: memory, array, redis.',
+		)
 	})
 })

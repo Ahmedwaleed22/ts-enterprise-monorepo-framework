@@ -33,7 +33,10 @@ function clientConnection(client: PgClient, parent: Connection): Connection {
 	return {
 		dialect: 'postgres',
 		async select<T extends Row = Row>(query: string, bindings: readonly Bindable[] = []) {
-			const result = await client.query(toPositionalPlaceholders(query), normalize(bindings))
+			const result = await client.query(
+				toPositionalPlaceholders(query),
+				normalize(bindings),
+			)
 			return result.rows as T[]
 		},
 		async statement(query: string, bindings: readonly Bindable[] = []) {
@@ -67,7 +70,10 @@ export async function createPostgresConnection(
 	const module = await loadDriver<PgModule>('pg', 'pg @types/pg')
 	const pool = new module.default.Pool(
 		config.url
-			? { connectionString: config.url, ssl: config.ssl ? { rejectUnauthorized: false } : undefined }
+			? {
+					connectionString: config.url,
+					ssl: config.ssl ? { rejectUnauthorized: false } : undefined,
+				}
 			: {
 					host: config.host,
 					port: config.port,
@@ -82,7 +88,10 @@ export async function createPostgresConnection(
 		dialect: 'postgres',
 
 		async select<T extends Row = Row>(query: string, bindings: readonly Bindable[] = []) {
-			const result = await pool.query(toPositionalPlaceholders(query), normalize(bindings))
+			const result = await pool.query(
+				toPositionalPlaceholders(query),
+				normalize(bindings),
+			)
 			return result.rows as T[]
 		},
 

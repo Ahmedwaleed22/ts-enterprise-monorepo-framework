@@ -60,7 +60,9 @@ describe('rejecting bad payloads', () => {
 		// GCM authenticates as well as encrypts, so this fails rather than
 		// returning garbage plaintext.
 		const [version, iv, tag, ciphertext] = encrypter.encryptString('hello').split('.')
-		const flipped = ciphertext.startsWith('A') ? `B${ciphertext.slice(1)}` : `A${ciphertext.slice(1)}`
+		const flipped = ciphertext.startsWith('A')
+			? `B${ciphertext.slice(1)}`
+			: `A${ciphertext.slice(1)}`
 
 		expect(() => encrypter.decryptString([version, iv, tag, flipped].join('.'))).toThrow(
 			/tampered with or uses a different key/,
@@ -71,9 +73,9 @@ describe('rejecting bad payloads', () => {
 		const [version, iv, tag, ciphertext] = encrypter.encryptString('hello').split('.')
 		const flipped = tag.startsWith('A') ? `B${tag.slice(1)}` : `A${tag.slice(1)}`
 
-		expect(() => encrypter.decryptString([version, iv, flipped, ciphertext].join('.'))).toThrow(
-			/tampered with or uses a different key/,
-		)
+		expect(() =>
+			encrypter.decryptString([version, iv, flipped, ciphertext].join('.')),
+		).toThrow(/tampered with or uses a different key/)
 	})
 
 	test('rejects a payload encrypted under a different key', () => {
@@ -89,9 +91,9 @@ describe('rejecting bad payloads', () => {
 		const [version, , tag, ciphertext] = encrypter.encryptString('hello').split('.')
 		const shortIv = Buffer.alloc(4).toString('base64url')
 
-		expect(() => encrypter.decryptString([version, shortIv, tag, ciphertext].join('.'))).toThrow(
-			'The payload is not a valid encrypted value.',
-		)
+		expect(() =>
+			encrypter.decryptString([version, shortIv, tag, ciphertext].join('.')),
+		).toThrow('The payload is not a valid encrypted value.')
 	})
 })
 
@@ -127,7 +129,9 @@ describe('signing', () => {
 	})
 
 	test('refuses to sign a value containing the separator', () => {
-		expect(() => encrypter.sign('has.separator')).toThrow('A signed value cannot contain "."')
+		expect(() => encrypter.sign('has.separator')).toThrow(
+			'A signed value cannot contain "."',
+		)
 	})
 
 	test('a signature cannot be decrypted', () => {

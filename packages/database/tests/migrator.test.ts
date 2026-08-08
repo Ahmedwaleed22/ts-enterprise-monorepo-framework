@@ -179,10 +179,7 @@ describe('transactional safety', () => {
 describe('multiple migration sources', () => {
 	function merged(): Migrator {
 		return new Migrator(connection, {
-			path: [
-				{ path: migrations },
-				{ path: packageMigrations, prefix: 'widgets' },
-			],
+			path: [{ path: migrations }, { path: packageMigrations, prefix: 'widgets' }],
 			logger: silent,
 		})
 	}

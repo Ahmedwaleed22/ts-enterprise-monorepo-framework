@@ -59,7 +59,9 @@ function pooledConnection(client: MysqlConnection, parent: Connection): Connecti
  *
  * @internal
  */
-export async function createMysqlConnection(config: ConnectionConfig): Promise<Connection> {
+export async function createMysqlConnection(
+	config: ConnectionConfig,
+): Promise<Connection> {
 	const module = await loadDriver<MysqlModule>('mysql2/promise', 'mysql2')
 	const pool = module.default.createPool(
 		config.url

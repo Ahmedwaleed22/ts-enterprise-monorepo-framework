@@ -134,7 +134,11 @@ export class Migrator {
 				? [{ path: resolve(options.path) }]
 				: options.path.map((source) => ({ ...source, path: resolve(source.path) }))
 		this.repository = new MigrationRepository(connection, options.table)
-		this.log = options.logger ?? ((message) => { console.log(message) })
+		this.log =
+			options.logger ??
+			((message) => {
+				console.log(message)
+			})
 	}
 
 	/**
@@ -204,7 +208,9 @@ export class Migrator {
 
 		// Rolling back starts from names in the tracking table rather than from
 		// disk, so the files have to be looked up the other way round.
-		const files = new Map((await this.discover()).map((entry) => [entry.name, entry.file]))
+		const files = new Map(
+			(await this.discover()).map((entry) => [entry.name, entry.file]),
+		)
 
 		const rolledBack: string[] = []
 		for (let step = 0; step < steps; step += 1) {
@@ -267,7 +273,10 @@ export class Migrator {
 	async status(): Promise<MigrationStatus[]> {
 		await this.repository.ensureExists()
 		const batches = new Map(
-			(await this.repository.ranRecords()).map((record) => [record.migration, record.batch]),
+			(await this.repository.ranRecords()).map((record) => [
+				record.migration,
+				record.batch,
+			]),
 		)
 
 		return (await this.discover()).map((entry) => ({

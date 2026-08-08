@@ -71,7 +71,9 @@ async function resolveDriver(): Promise<SqliteConstructor> {
  *
  * @internal
  */
-export async function createSqliteConnection(config: ConnectionConfig): Promise<Connection> {
+export async function createSqliteConnection(
+	config: ConnectionConfig,
+): Promise<Connection> {
 	const filename = config.url ?? 'database/database.sqlite'
 	if (filename !== ':memory:') {
 		// Create the containing directory so a fresh checkout can migrate

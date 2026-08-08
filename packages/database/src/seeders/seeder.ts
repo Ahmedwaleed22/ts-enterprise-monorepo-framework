@@ -109,7 +109,9 @@ export abstract class Seeder {
 
 		for (let offset = 0; offset < rows.length; offset += MAX_ROWS_PER_INSERT) {
 			const chunk = rows.slice(offset, offset + MAX_ROWS_PER_INSERT)
-			const bindings = chunk.flatMap((row) => columns.map((column) => row[column] as Bindable))
+			const bindings = chunk.flatMap((row) =>
+				columns.map((column) => row[column] as Bindable),
+			)
 
 			await this.connection.statement(
 				`insert into ${grammar.wrap(table)} (${columnList}) ` +
