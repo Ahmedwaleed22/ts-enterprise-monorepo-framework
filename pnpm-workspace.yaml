@@ -1,0 +1,14 @@
+packages:
+  - 'apps/*'
+  - 'packages/*'
+allowBuilds:
+  '@parcel/watcher': true
+  '@tailwindcss/oxide': true
+  esbuild: true
+  less: true
+  nx: true
+  sharp: set this to true or false
+  unrs-resolver: set this to true or false
+onlyBuiltDependencies:
+  - '@tailwindcss/oxide'
+  - esbuild

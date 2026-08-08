@@ -1,0 +1,38 @@
+{
+	"$schema": "./node_modules/nx/schemas/nx-schema.json",
+	"targetDefaults": {
+		"dev": {
+			"dependsOn": ["^dev"]
+		},
+		"build": {
+			"dependsOn": ["^build"]
+		},
+		"start": {
+			"dependsOn": ["^start"]
+		},
+		"lint": {
+			"dependsOn": ["^lint"]
+		}
+	},
+	"analytics": false,
+	"plugins": [
+		{
+			"plugin": "@nx/eslint/plugin",
+			"options": {
+				"targetName": "eslint:lint"
+			}
+		},
+		{
+			"plugin": "@nx/next/plugin",
+			"options": {
+				"startTargetName": "next:start",
+				"buildTargetName": "next:build",
+				"devTargetName": "next:dev",
+				"serveStaticTargetName": "serve-static",
+				"buildDepsTargetName": "build-deps",
+				"watchDepsTargetName": "watch-deps"
+			}
+		}
+	],
+	"nxCloudId": "6a76a99be037557247e73eba"
+}

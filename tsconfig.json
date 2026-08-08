@@ -1,0 +1,26 @@
+{
+  "compilerOptions": {
+    "target": "ESNext",
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    "noEmit": true,
+    "noImplicitAny": true,
+    "allowJs": true,
+    "strict": true,
+    "allowSyntheticDefaultImports": true,
+    "noUncheckedSideEffectImports": true
+  },
+  "include": [
+    "eslint.config.mts",
+    "packages/*/src/**/*.ts",
+    "packages/*/src/**/*.js",
+    "packages/*/src/**/*.svelte",
+    "packages/*/tests/**/*.ts",
+    "packages/*/tests/**/*.js",
+    "packages/*/tests/**/*.svelte",
+    "**/tailwind.config.js",
+    "**/postcss.config.cjs",
+    "**/vite.config.ts",
+  ],
+  "exclude": ["**/assets/**/*", "node_modules", "dist"]
+}

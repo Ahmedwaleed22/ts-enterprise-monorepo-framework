@@ -1,0 +1,27 @@
+{
+  "name": "@monorepo-framework/web",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "dev": "nx next:dev",
+    "build": "nx next:build",
+    "start": "nx next:start",
+    "lint": "eslint"
+  },
+  "dependencies": {
+    "next": "16.2.12",
+    "react": "19.2.4",
+    "react-dom": "19.2.4"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "^4",
+    "@types/node": "^20",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "eslint": "^9",
+    "eslint-config-next": "16.2.12",
+    "tailwindcss": "^4",
+    "typescript": "^5",
+    "vitest": "^4.1.10"
+  }
+}
