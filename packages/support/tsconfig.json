@@ -1,0 +1,14 @@
+{
+  // Tooling config (editor, eslint's projectService, vitest). Covers tests too,
+  // so type-aware lint rules can resolve them. Emitting is tsconfig.build.json's
+  // job — this one inherits `noEmit` from the root config.
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    // Server-side only: dropping the DOM lib keeps browser globals out of reach
+    // and avoids the clash between `@types/node@26` and TypeScript 5.8's
+    // bundled `lib.dom.d.ts` over TextEncoder/TextDecoder.
+    "lib": ["ESNext"]
+  },
+  "include": ["src/**/*.ts", "tests/**/*.ts"],
+  "exclude": ["node_modules", "dist"]
+}
