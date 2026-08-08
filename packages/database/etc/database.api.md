@@ -113,6 +113,7 @@ export interface ConsoleOptions {
     connection?: ConnectionConfig;
     migrations: string;
     migrationsTable?: string;
+    packageMigrations?: readonly MigrationSource[];
     seeders: string;
 }
 
@@ -197,6 +198,12 @@ export class MigrationRepository {
 }
 
 // @public
+export interface MigrationSource {
+    path: string;
+    prefix?: string;
+}
+
+// @public
 export interface MigrationStatus {
     batch: number | undefined;
     migration: string;
@@ -217,7 +224,7 @@ export class Migrator {
 // @public
 export interface MigratorOptions {
     logger?: (message: string) => void;
-    path: string;
+    path: string | readonly MigrationSource[];
     table?: string;
 }
 

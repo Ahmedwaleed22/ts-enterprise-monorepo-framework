@@ -28,5 +28,16 @@ Laravel-style migrations and seeders that run unchanged on Postgres, MySQL and s
 
 
 </td></tr>
+<tr><td>
+
+[@monorepo-framework/support](./support.md)
+
+
+</td><td>
+
+Shared primitives every framework package builds on.
+
+
+</td></tr>
 </tbody></table>
 
